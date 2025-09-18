@@ -34,6 +34,9 @@ A professional RDP penetration testing tool that displays every combination atte
 - Python 3.6+
 - FreeRDP2 (xfreerdp client)
 - Linux environment (recommended)
+- cd rdp-master
+- pip install -r requirements.txt
+
 
 ### System Dependencies
 ```bash
