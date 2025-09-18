@@ -36,6 +36,7 @@ A professional RDP penetration testing tool that displays every combination atte
 - Linux environment (recommended)
 - cd rdp-master
 - pip install -r requirements.txt
+- Use --help for usage information
 
 
 ### System Dependencies
@@ -55,6 +56,8 @@ sudo pacman -S freerdp
 python3 rdp_master.py -U Administrator -p passwords.txt -i ips.txt
 
 python3 rdp_master.py -u users.txt -p passwords.txt -i ips.txt -t 50 -o results.txt
+
+python3 rdp_master.py -u users.txt -p passwords.txt -i ips.txt -b 5000
 ``````
 
 
