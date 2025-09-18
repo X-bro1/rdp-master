@@ -1,0 +1,10 @@
+paramiko
+requests
+socket-timeout
+threading-extensions
+argparse
+tqdm
+colorama
+rich>=13.0.0
+pyfiglet>=0.8.post1
+
