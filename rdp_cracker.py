@@ -15,6 +15,7 @@ import os
 import argparse
 import random
 from queue import Queue, Empty
+import shutil  
 
 # Import des dépendances optionnelles avec fallback
 try:
@@ -22,15 +23,15 @@ try:
     PYFIGLET_AVAILABLE = True
 except ImportError:
     PYFIGLET_AVAILABLE = False
-    print("⚠️  pyfiglet not installed. Using simple banner.")
 
 try:
     from rich.console import Console
     from rich.panel import Panel
+    from rich.text import Text
+    from rich.box import ROUNDED
     RICH_AVAILABLE = True
 except ImportError:
     RICH_AVAILABLE = False
-    print("⚠️  rich not installed. Using simple output.")
 
 # Initialisation de la console
 if RICH_AVAILABLE:
@@ -38,35 +39,85 @@ if RICH_AVAILABLE:
 else:
     console = None
 
-# === MODERN BANNER ===
+# === ULTIMATE TERMINAL BANNER ===
 def show_banner():
-    """Affiche un banner stylé pour l'outil"""
+    """Affiche un banner ultra stylé pour terminal"""
+    # Obtenir la largeur du terminal
+    terminal_width = shutil.get_terminal_size().columns
+    
     if RICH_AVAILABLE and PYFIGLET_AVAILABLE:
         try:
-            banner = pyfiglet.figlet_format("RDP Cracking", font="slant")
+            # Banner principal avec style agressif
+            banner_text = pyfiglet.figlet_format("RDP Master", font="slant")
+            
+            # Centrer le texte
+            centered_banner = "\n".join(line.center(terminal_width) for line in banner_text.split("\n"))
+            
+            # Textes sans cadre
+            title_line = "ADVANCED RDP PENETRATION TESTING FRAMEWORK"
+            subtitle_line = "Multi-threaded • Real-time • Professional"
+            
+            # Textes d'information
+            version_line = "⚡ Version: 1.0 ⚡ Threads: Dynamic ⚡ Targets: Multiple"
+            warning_line = "⚠️  AUTHORIZED USE ONLY - LEGAL PENETRATION TESTING"
+            support_line = "🔗 Support: https://ko-fi.com/xbro1"
+            
+            # Créer le contenu du panel
+            panel_content = [
+                f"[bold red]{centered_banner}[/bold red]",
+                "",
+                f"[bold white]{title_line.center(terminal_width)}[/bold white]",
+                f"[bold cyan]{subtitle_line.center(terminal_width)}[/bold cyan]",
+                "",
+                f"[bold white]{version_line.center(terminal_width)}[/bold white]",
+                f"[bold red]{warning_line.center(terminal_width)}[/bold red]",
+                f"[bold yellow]{support_line.center(terminal_width)}[/bold yellow]"
+            ]
+            
+            # Joindre le contenu
+            final_content = "\n".join(panel_content)
+            
+            # Création d'un panel riche
             console.print(Panel.fit(
-                f"[bold red]{banner}[/bold red]\n"
-                f"[italic]                 Advanced RDP Cracking Tool     [/italic]\n"
-                f"[bold green]<<<<<>>>>>   Support: https://ko-fi.com/xbro1   [/bold green]\n",
-                border_style="red",
-                subtitle="[bold yellow]  Made By X-Bro  [/bold yellow]"
+                final_content,
+                border_style="bright_red",
+                box=ROUNDED,
+                padding=(1, 2),
+                title="[blink bold yellow] BY X-BRO [/blink bold yellow]",
+                subtitle="[italic bright_green] Cybersecurity Specialist [/italic bright_green]"
             ))
-        except:
-            # Fallback si pyfiglet échoue
+            
+            # Ligne de séparation stylée
+            separator = "▄" * (terminal_width - 2)
+            console.print(f"[bold yellow]{separator}[/bold yellow]")
+            
+        except Exception as e:
+            print(f"Error with rich banner: {e}")
             show_simple_banner()
     else:
         show_simple_banner()
 
 def show_simple_banner():
-    """Banner de fallback si les dépendances ne sont pas disponibles"""
-    print("=" * 60)
-    print("            RDP CRACKER ULTIMATE")
-    print("            Advanced RDP Cracking Tool")
-    print("=" * 60)
-    print("            Made By X-Bro")
-    print("    Support: https://ko-fi.com/xbro1")
-    print("=" * 60)
+    """Banner de fallback stylé"""
+    # Obtenir la largeur du terminal
+    terminal_width = shutil.get_terminal_size().columns
+    
+    # Fonction pour centrer le texte
+    def center_text(text):
+        return text.center(terminal_width)
+    
+    # Textes sans cadre
+    print(center_text("ADVANCED RDP PENETRATION TESTING FRAMEWORK"))
+    print(center_text("Multi-threaded • Real-time • Professional"))
+    print()
+    print(center_text("⚡ Version: 1.0 ⚡ Threads: Dynamic ⚡ Targets: Multiple"))
+    print(center_text("⚠️  AUTHORIZED USE ONLY - LEGAL PENETRATION TESTING"))
+    print(center_text("🔗 Support: https://ko-fi.com/xbro1"))
+    print()
+    print(center_text("BY X-BRO - Cybersecurity Specialist"))
+    print("")
 
+    
 class RDPCrackerUltimate:
     def __init__(self, username_file=None, password_file=None, ips_file=None, 
                  max_threads=20, timeout=5, output_file=None, fixed_user=None,
@@ -100,6 +151,12 @@ class RDPCrackerUltimate:
     
     def blue_text(self, text):
         return f"\033[94m{text}\033[0m"
+    
+    def magenta_text(self, text):
+        return f"\033[95m{text}\033[0m"
+    
+    def cyan_text(self, text):
+        return f"\033[96m{text}\033[0m"
     
     def load_file(self, file_path):
         """Charge un fichier ligne par ligne"""
@@ -187,8 +244,8 @@ class RDPCrackerUltimate:
                     self.attempts += 1
                     current_attempt = self.attempts
                 
-                # Afficher CHAQUE tentative en cours
-                print(f"🔍 Testing: {ip} - {username}:{password} (Attempt: {current_attempt})")
+                # Afficher CHAQUE tentative en cours avec style
+                print(f"🔍 [Testing] {self.cyan_text(ip)} - {self.yellow_text(username)}:{self.magenta_text(password)} (Attempt: {current_attempt})")
                 
                 # Test the connection
                 success = self.test_rdp_connection(ip, username, password)
@@ -199,12 +256,12 @@ class RDPCrackerUltimate:
                         result = f"{ip} - {username}:{password}"
                         self.found_credentials.append(result)
                     
-                    # BOOM CRACKED ACCESS message
-                    print("\n" + "="*60)
-                    print(self.red_text("🔥 BOOM CRACKED ACCESS 🔥"))
+                    # BOOM CRACKED ACCESS message avec style explosif
+                    print("\n" + "="*70)
+                    print(self.red_text("💥 BOOM! CRACKED ACCESS 💥"))
                     print(self.red_text("🎯 ACCESS GRANTED !!!"))
-                    print(self.red_text(f"✅ {result}"))
-                    print("="*60 + "\n")
+                    print(self.green_text(f"✅ SUCCESS: {ip} - {username}:{password}"))
+                    print("="*70 + "\n")
                     
                     # Save to file immediately
                     if self.output_file:
@@ -249,7 +306,7 @@ class RDPCrackerUltimate:
                 return
         
         total_combinations = len(ips) * len(usernames) * len(passwords)
-        print(f"📊 Total combinations: {total_combinations:,}")
+        print(f"📊 Total combinations: {self.cyan_text(str(total_combinations))}")
         print(f"✅ IPs: {len(ips)} | Users: {len(usernames)} | Passwords: {len(passwords)}")
         print("🔄 Starting tests...\n")
         
@@ -339,8 +396,8 @@ class RDPCrackerUltimate:
                     
                     # Mettre à jour l'affichage toutes les 15 secondes
                     if current_time - last_update > 15:
-                        print(f"\n📊 SUMMARY: {attempts:,} attempts | {queue_size:,} in queue | "
-                              f"{successes} found | {speed:.1f} attempts/sec | "
+                        print(f"\n📊 [STATUS] Attempts: {attempts:,} | Queue: {queue_size:,} | "
+                              f"Found: {successes} | Speed: {speed:.1f}/sec | "
                               f"ETA: {eta/60:.1f} min\n")
                         last_update = current_time
                 
@@ -357,12 +414,12 @@ class RDPCrackerUltimate:
         finally:
             self.stop_event.set()
             
-            # Résultats finaux
-            print("\n" + "="*50)
+            # Résultats finaux avec style
+            print("\n" + "="*60)
             print("🎯 FINAL RESULTS")
-            print("="*50)
-            print(f"Total attempts: {self.attempts:,}")
-            print(f"Successful logins: {self.success_count}")
+            print("="*60)
+            print(f"Total attempts: {self.cyan_text(str(self.attempts))}")
+            print(f"Successful logins: {self.green_text(str(self.success_count))}")
             
             if self.success_count > 0:
                 print("\n🔥 CRACKED CREDENTIALS:")
@@ -376,12 +433,12 @@ class RDPCrackerUltimate:
             
             print(f"\n⏱️  Total time: {time.time() - start_time:.0f} seconds")
             
-            # Afficher le message de support à la fin du scan
-            print("\n" + "="*60)
+            # Message de support stylé
+            print("\n" + "⭐" * 60)
             print("💖 If you find this tool useful, please consider supporting")
-            print("   its development by buying a coffee for X-Bro:")
-            print("   https://ko-fi.com/xbro1")
-            print("="*60)
+            print("   its development by buying a coffee for X-Bro: 🔗 https://ko-fi.com/xbro1")
+            print("   For more private tools: https://t.me/+Djn6L6DK1jcyNjg8 ")
+            print("⭐" * 60)
 
 def display_help_examples():
     """Affiche des exemples d'utilisation"""
@@ -469,3 +526,4 @@ Examples:
 
 if __name__ == "__main__":
     main()
+
