@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
-RDP CRACKER ULTIMATE - Version avec affichage de chaque combinaison
-Affiche chaque test en temps réel avec résultat immédiat
+RDP CRACKER ULTIMATE
 
 ⚠️  WARNING: This tool is for authorized penetration testing only!
     Use only on systems you have explicit permission to test.
@@ -526,4 +525,5 @@ Examples:
 
 if __name__ == "__main__":
     main()
+
 
