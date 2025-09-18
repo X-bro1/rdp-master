@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-RDP CRACKER ULTIMATE
+RDP CRACKER ULTIMATE - Version avec affichage de chaque combinaison
+Affiche chaque test en temps réel avec résultat immédiat
 
 ⚠️  WARNING: This tool is for authorized penetration testing only!
     Use only on systems you have explicit permission to test.
@@ -358,8 +359,16 @@ class RDPCrackerUltimate:
         producer_thread.daemon = True
         producer_thread.start()
         
-        # Attendre que le producteur commence à remplir la file
-        time.sleep(2)
+        # Attendre que le producteur commence à remplir la file (version avec gestion Ctrl+C)
+        try:
+            for i in range(20):  # Wait 2 seconds total (20 * 0.1)
+                if self.stop_event.is_set():
+                    break
+                time.sleep(0.1)
+        except KeyboardInterrupt:
+            self.stop_event.set()
+            print("\n⏹️ Stopped by user during initialization")
+            return
         
         print(f"📋 Initial queue size: {self.queue.qsize()}")
         print("⏳ Starting worker threads...\n")
@@ -525,5 +534,3 @@ Examples:
 
 if __name__ == "__main__":
     main()
-
-
